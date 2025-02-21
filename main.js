@@ -61,34 +61,6 @@ const getNodes = async () => {
   return nodes
 }
 
-const ping = async node => {
-  const partialMeasurement = {
-    alive: false,
-    timeout: null,
-    ttfbMs: null
-  }
-  const start = new Date()
-  try {
-    const res = await fetch(
-      `${node.protocol}://${node.host}:${node.port}/`,
-      {
-        signal: AbortSignal.timeout(PING_TIMEOUT)
-      }
-    )
-    if (!res.ok) {
-      throw new Error()
-    }
-  } catch (err) {
-    if (err.name === 'TimeoutError') {
-      partialMeasurement.timeout = true
-    }
-    return partialMeasurement
-  }
-  partialMeasurement.alive = true
-  partialMeasurement.ttfbMs = new Date().getTime() - start.getTime()
-  return partialMeasurement
-}
-
 const retrieve = async node => {
   const arweave = Arweave.init(node)
   const txId = RANDOM_TRANSACTION_IDS[Math.floor(Math.random() * RANDOM_TRANSACTION_IDS.length)]
@@ -118,7 +90,6 @@ const retrieve = async node => {
 const measure = async node => {
   return {
     node,
-    ping: await ping(node),
     retrieval: await retrieve(node)
   }
 }
