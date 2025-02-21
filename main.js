@@ -1,7 +1,7 @@
 /* global Arweave */
 
 import './vendor/arweave.js'
-import pTimeout, { TimeoutError } from './vendor/p-timeout.js'
+import pTimeout from './vendor/p-timeout.js'
 
 const IP_ADDRESS_REGEX = /^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$/
 const ONE_MINUTE = 60_000
@@ -66,7 +66,6 @@ const retrieve = async node => {
   const partialMeasurement = {
     txId,
     alive: false,
-    timeout: null,
     durationMs: null
   }
   const start = new Date()
@@ -76,9 +75,6 @@ const retrieve = async node => {
       { milliseconds: RETRIEVE_TIMEOUT }
     )
   } catch (err) {
-    if (err instanceof TimeoutError) {
-      partialMeasurement.timeout = true
-    }
     return partialMeasurement
   }
   partialMeasurement.alive = true
