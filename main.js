@@ -14,7 +14,6 @@ const RANDOM_TRANSACTION_IDS = [
   'XO6w3W8dYZnioq-phAbq8SG1Px5kci_j3RmcChS05VY',
   's2aJ5tzVEcSxITsq2G5cZnAhBDplCSkARJEOuNMZ31o'
 ]
-const PING_TIMEOUT = 10_000
 const RETRIEVE_TIMEOUT = 10_000
 
 const getNodes = async () => {
