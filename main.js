@@ -60,34 +60,23 @@ const getNodes = async () => {
   return nodes
 }
 
-const retrieve = async node => {
+const measure = async node => {
   const arweave = Arweave.init(node)
   const txId = RANDOM_TRANSACTION_IDS[Math.floor(Math.random() * RANDOM_TRANSACTION_IDS.length)]
-  const partialMeasurement = {
-    txId,
-    retrievable: false
-  }
   try {
     await pTimeout(
       arweave.chunks.downloadChunkedData(txId),
       { milliseconds: RETRIEVE_TIMEOUT }
     )
   } catch (err) {
-    return partialMeasurement
+    console.error(err)
+    return false
   }
-  partialMeasurement.retrievable = true
-  return partialMeasurement
-}
-
-const measure = async node => {
-  return {
-    node,
-    retrieval: await retrieve(node)
-  }
+  return true
 }
 
 const submit = async measurement => {
-  const res = await fetch('https://arweave.checker.network/measurements', {
+  const res = await fetch('https://api.checker.network/arweave/measurement', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -119,7 +108,7 @@ while (true) {
   const measurement = await measure(
     nodes[Math.floor(Math.random() * nodes.length)]
   )
-  console.log(measurement)
+  console.log('measurement:', measurement)
   try {
     await submit(measurement)
   } catch (err) {
