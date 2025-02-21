@@ -65,10 +65,8 @@ const retrieve = async node => {
   const txId = RANDOM_TRANSACTION_IDS[Math.floor(Math.random() * RANDOM_TRANSACTION_IDS.length)]
   const partialMeasurement = {
     txId,
-    alive: false,
-    durationMs: null
+    alive: false
   }
-  const start = new Date()
   try {
     await pTimeout(
       arweave.chunks.downloadChunkedData(txId),
@@ -78,7 +76,6 @@ const retrieve = async node => {
     return partialMeasurement
   }
   partialMeasurement.alive = true
-  partialMeasurement.durationMs = new Date().getTime() - start.getTime()
   return partialMeasurement
 }
 
