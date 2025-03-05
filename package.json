@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "test": "standard"
+    "lint": "standard",
+    "lint:fix": "standard --fix"
   },
   "devDependencies": {
     "standard": "^17.1.2"
