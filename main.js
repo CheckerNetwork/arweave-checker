@@ -4,7 +4,6 @@ import './vendor/arweave.js'
 import pTimeout from './vendor/p-timeout.js'
 import { getNodes } from './lib/nodes.js'
 
-const IP_ADDRESS_REGEX = /^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$/
 const ONE_MINUTE = 60_000
 const MEASUREMENT_DELAY = ONE_MINUTE
 const UPDATE_NODES_DELAY = 10 * ONE_MINUTE
