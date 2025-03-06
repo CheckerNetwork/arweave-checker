@@ -7,7 +7,6 @@ Install [Zinnia CLI](https://github.com/filecoin-station/zinnia).
 
 ```bash
 $ # Lint
-$ npm install
 $ npx lint
 $ # Run module
 $ zinnia run main.js

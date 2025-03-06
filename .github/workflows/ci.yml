@@ -10,8 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-      - run: npm ci
-      - run: npm run lint
+      - run: npx standard
       - run: curl -L https://github.com/filecoin-station/zinnia/releases/download/${{ env.ZINNIA_VERSION }}/zinnia-linux-x64.tar.gz | tar -xz
       - run: ./zinnia run test.js
 
