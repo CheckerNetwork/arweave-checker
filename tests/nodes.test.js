@@ -2,7 +2,7 @@ import { test } from 'zinnia:test'
 import { assertEquals } from 'zinnia:assert'
 import { getNodes } from '../lib/nodes.js'
 
-test('should arweave node by default', async () => {
+test('should return arweave.net node by default', async () => {
   const mockFetch = (pages) => {
     return Promise.resolve({
       json: () => ({
