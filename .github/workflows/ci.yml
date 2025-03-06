@@ -2,8 +2,7 @@ name: CI
 on: [push]
 
 env:
-  ZINNIA_VERSION: {{ vars.ZINNIA_VERSION }}
-
+  ZINNIA_VERSION: v0.20.2
 jobs:
   build:
     runs-on: ubuntu-latest
