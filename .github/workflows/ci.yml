@@ -1,6 +1,9 @@
 name: CI
 on: [push]
 
+env:
+  ZINNIA_VERSION: {{ vars.ZINNIA_VERSION }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
