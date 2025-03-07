@@ -1,25 +1,8 @@
-/* global Arweave */
-
-import './vendor/arweave.js'
-import pTimeout from './vendor/p-timeout.js'
 import { getNodes } from './lib/nodes.js'
 import { getTransactions } from './lib/transactions.js'
-import { MEASUREMENT_DELAY, UPDATE_NODES_DELAY, RETRIEVE_TIMEOUT } from './lib/constants.js'
+import { measure } from './lib/measure.js'
 import { pickRandomItem } from './lib/random.js'
-
-const measure = async (node, txId) => {
-  const arweave = Arweave.init(node)
-  try {
-    await pTimeout(
-      arweave.chunks.downloadChunkedData(txId),
-      { milliseconds: RETRIEVE_TIMEOUT }
-    )
-  } catch (err) {
-    console.error(err)
-    return false
-  }
-  return true
-}
+import { MEASUREMENT_DELAY, UPDATE_NODES_DELAY } from './lib/constants.js'
 
 const submit = async measurement => {
   const res = await fetch('https://api.checker.network/arweave/measurement', {
