@@ -1,8 +1,10 @@
 /* global Arweave */
+/* global Zinnia */
 
 import './vendor/arweave.js'
 import pTimeout from './vendor/p-timeout.js'
 import { getNodes } from './lib/nodes.js'
+import { submit } from './lib/submit-measurement.js'
 
 const ONE_MINUTE = 60_000
 const MEASUREMENT_DELAY = ONE_MINUTE
@@ -31,21 +33,6 @@ const measure = async node => {
   return true
 }
 
-const submit = async measurement => {
-  const res = await fetch('https://api.checker.network/arweave/measurement', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(measurement)
-  })
-  if (!res.ok) {
-    throw new Error(`Failed to submit measurement (status=${res.status})`, {
-      cause: new Error(await res.text().catch(() => null))
-    })
-  }
-}
-
 let nodes = await getNodes()
 
 ;(async () => {
@@ -71,6 +58,7 @@ while (true) {
     console.error('Error submitting measurement')
     console.error(err)
   }
+  Zinnia.jobComplete()
   console.log(`Waiting ${MEASUREMENT_DELAY / 1_000} seconds...`)
   await new Promise(resolve => setTimeout(resolve, MEASUREMENT_DELAY))
 }
