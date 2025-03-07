@@ -59,7 +59,6 @@ test('should return nodes from all pages with a custom fetch function', async ()
   ])
 })
 
-
 test('should return nodes where response status is OK', async () => {
   const mockFetch = (page) => {
     if (page === 0) {
