@@ -3,7 +3,7 @@ import { assertEquals } from 'zinnia:assert'
 import { measure } from '../lib/measure.js'
 
 const TX_ID = 'sHqUBKFeS42-CMCvNqPR31yEP63qSJG3ImshfwzJJF8'
-const NODE = { 
+const NODE = {
   host: 'arweave.net',
   port: 443,
   protocol: 'https'
