@@ -11,5 +11,5 @@ const NODE = {
 
 test('should return true for a successful measurement', async () => {
   const result = await measure(NODE, TX_ID)
-  assertEquals(result, true)
+  assertEquals(result, { retrievalSucceeded: true })
 })

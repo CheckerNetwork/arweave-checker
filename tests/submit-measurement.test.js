@@ -15,7 +15,7 @@ test('submit measurement succeeds', async () => {
     }
   }
 
-  const measurement = true
+  const measurement = { retrievalSucceeded: true }
   await submit(measurement, fetch)
   assertEquals(requests.length, 1)
   assertEquals(requests, [
@@ -24,7 +24,7 @@ test('submit measurement succeeds', async () => {
       opts: {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ retrievalSucceeded: measurement })
+        body: JSON.stringify(measurement)
       }
     }
   ])
@@ -43,7 +43,7 @@ test('submit measurements fails', async () => {
     }
   }
 
-  const measurement = true
+  const measurement = { retrievalSucceeded: true }
   await assertRejects(async () => await submit(measurement, fetch), 'Failed to submit measurement (status=500)')
   assertEquals(requests.length, 1)
   assertEquals(requests, [
@@ -52,7 +52,7 @@ test('submit measurements fails', async () => {
       opts: {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ retrievalSucceeded: measurement })
+        body: JSON.stringify(measurement)
       }
     }
   ])
