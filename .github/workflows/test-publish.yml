@@ -1,0 +1,20 @@
+name: Test Publish
+on:
+  push:
+    branches:
+      - chore/setup-repository
+jobs:
+  test-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Mock the release tarball URL since we don't have an actual release
+      - run: git archive --format=tar.gz -o source.tar.gz HEAD
+      - uses: CheckerNetwork/publish-zinnia-module-action@v0
+        id: publish
+        with:
+          source: source.tar.gz
+          w3up-private-key: ${{ secrets.W3UP_PRIVATE_KEY }}
+          w3up-proof: ${{ secrets.W3UP_PROOF }}
+          w3name-private-key: ${{ secrets.W3NAME_PRIVATE_KEY }}
+          w3name-revision: ${{ secrets.W3NAME_REVISION }}
