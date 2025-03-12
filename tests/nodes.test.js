@@ -64,6 +64,7 @@ test('should return nodes where response status is OK', async () => {
     if (page === 0) {
       return Promise.resolve({
         ok: false,
+        text: async () => ('Internal Server Error'),
         json: () => ({
           pages: 2,
           docs: [
