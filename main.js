@@ -1,35 +1,8 @@
-/* global Arweave */
-
-import './vendor/arweave.js'
-import pTimeout from './vendor/p-timeout.js'
 import { getNodes } from './lib/nodes.js'
-
-const ONE_MINUTE = 60_000
-const MEASUREMENT_DELAY = ONE_MINUTE
-const UPDATE_NODES_DELAY = 10 * ONE_MINUTE
-const RANDOM_TRANSACTION_IDS = [
-  'sHqUBKFeS42-CMCvNqPR31yEP63qSJG3ImshfwzJJF8',
-  'vexijI_Ij0GfvWW1wvewlz255_v1Ni7dk9LuQdbi6yw',
-  '797MuCtgdgiDrglJWczz2lMZkFkXInC88Htqv-JuOUQ',
-  'XO6w3W8dYZnioq-phAbq8SG1Px5kci_j3RmcChS05VY',
-  's2aJ5tzVEcSxITsq2G5cZnAhBDplCSkARJEOuNMZ31o'
-]
-const RETRIEVE_TIMEOUT = 10_000
-
-const measure = async node => {
-  const arweave = Arweave.init(node)
-  const txId = RANDOM_TRANSACTION_IDS[Math.floor(Math.random() * RANDOM_TRANSACTION_IDS.length)]
-  try {
-    await pTimeout(
-      arweave.chunks.downloadChunkedData(txId),
-      { milliseconds: RETRIEVE_TIMEOUT }
-    )
-  } catch (err) {
-    console.error(err)
-    return false
-  }
-  return true
-}
+import { getTransactions } from './lib/transactions.js'
+import { measure } from './lib/measure.js'
+import { pickRandomItem } from './lib/random.js'
+import { MEASUREMENT_DELAY, UPDATE_NODES_DELAY } from './lib/constants.js'
 
 const submit = async measurement => {
   const res = await fetch('https://api.checker.network/arweave/measurement', {
@@ -52,6 +25,7 @@ let nodes = await getNodes()
   while (true) {
     await new Promise(resolve => setTimeout(resolve, UPDATE_NODES_DELAY))
     try {
+      console.log('Updating nodes...')
       nodes = await getNodes()
     } catch (err) {
       console.error('Error updating nodes')
@@ -61,8 +35,11 @@ let nodes = await getNodes()
 })()
 
 while (true) {
+  const txs = await getTransactions()
+  console.log(`Found ${txs.length} transactions`)
   const measurement = await measure(
-    nodes[Math.floor(Math.random() * nodes.length)]
+    pickRandomItem(nodes),
+    pickRandomItem(txs)
   )
   console.log('measurement:', measurement)
   try {
