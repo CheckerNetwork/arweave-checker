@@ -12,3 +12,4 @@ $ # Run module
 $ zinnia run main.js
 $ # Test module
 $ zinnia run test.js
+```
