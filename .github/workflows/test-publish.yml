@@ -10,15 +10,10 @@ jobs:
       - uses: actions/checkout@v4
       # Mock the release tarball URL since we don't have an actual release
       - run: git archive --format=tar.gz -o source.tar.gz HEAD
-      - name: Debug file location
-        run: |
-          pwd
-          ls -la
-          file source.tar.gz
       - uses: CheckerNetwork/web3-storage-upload-file-action@v0
         id: upload
         with:
-          path: source.tar.gz
+          path: /home/runner/work/arweave-checker/arweave-checker/source.tar.gz
           private-key: ${{ secrets.W3UP_PRIVATE_KEY }}
           proof: ${{ secrets.W3UP_PROOF }}
       - uses: CheckerNetwork/w3name-update-action@v0
