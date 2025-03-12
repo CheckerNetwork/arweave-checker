@@ -7,7 +7,6 @@ import { submit } from './lib/submit-measurement.js'
 import { pickRandomItem } from './lib/random.js'
 import { MEASUREMENT_DELAY, UPDATE_NODES_DELAY } from './lib/constants.js'
 
-
 let nodes = await getNodes()
 
 ;(async () => {
