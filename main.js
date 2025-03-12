@@ -4,6 +4,7 @@ import { measure } from './lib/measure.js'
 import { pickRandomItem } from './lib/random.js'
 import { MEASUREMENT_DELAY, UPDATE_NODES_DELAY } from './lib/constants.js'
 
+
 const submit = async measurement => {
   const res = await fetch('https://api.checker.network/arweave/measurement', {
     method: 'POST',

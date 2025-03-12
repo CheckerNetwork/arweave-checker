@@ -96,3 +96,4 @@ test('should return nodes where response status is OK', async () => {
     { host: 'test.arweave.net', port: 443, protocol: 'https' }
   ])
 })
+
