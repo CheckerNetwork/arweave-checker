@@ -44,7 +44,8 @@ test('submit measurements fails', async () => {
   }
 
   const measurement = { retrievalSucceeded: true }
-  await assertRejects(async () => await submit(measurement, fetch), 'Failed to submit measurement (status=500)')
+  const err = await assertRejects(async () => await submit(measurement, fetch))
+  assertEquals(err.message, 'Failed to submit measurement (500): Internal Server Error')
   assertEquals(requests.length, 1)
   assertEquals(requests, [
     {
