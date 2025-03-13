@@ -1,3 +1,5 @@
 import './tests/nodes.test.js'
 import './tests/transactions.test.js'
 import './tests/measure.test.js'
+import './tests/submit-measurement.test.js'
+import './tests/http-assertions.test.js'
