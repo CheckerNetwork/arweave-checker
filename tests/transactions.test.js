@@ -3,7 +3,7 @@ import { assertEquals } from 'zinnia:assert'
 import { getTransactions } from '../lib/transactions.js'
 
 test('should return list of confirmed transactions', async () => {
-  const mockFetch = (url) => {
+  const mockFetch = (url, opts) => {
     if (url === 'https://arweave.net/info') {
       return Promise.resolve({
         ok: true,
