@@ -9,7 +9,7 @@ import { MEASUREMENT_DELAY, UPDATE_NODES_DELAY } from './lib/constants.js'
 
 let nodes = await getNodes()
 
-  ; (async () => {
+;(async () => {
   while (true) {
     await new Promise(resolve => setTimeout(resolve, UPDATE_NODES_DELAY))
     try {
