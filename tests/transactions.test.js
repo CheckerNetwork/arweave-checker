@@ -3,19 +3,20 @@ import { assertEquals } from 'zinnia:assert'
 import { getTransactions } from '../lib/transactions.js'
 
 test('should return list of confirmed transactions', async () => {
-  const mockFetch = (pages) => {
-    return Promise.resolve({
-      json: () => ({
-        pages: 1,
-        docs: [
-          { status: 'confirmed', id: '1' },
-          { status: 'pending', id: '2' },
-          { status: 'confirmed', id: '3' }
-        ]
+  const mockFetch = (url, opts) => {
+    if (url === 'https://arweave.net/info') {
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({ height: 2 })
       })
+    }
+
+    return Promise.resolve({
+      ok: true,
+      json: async () => ({ txs: ['1', '2', '3'] })
     })
   }
 
   const nodes = await getTransactions(mockFetch)
-  assertEquals(nodes, ['1', '3'])
+  assertEquals(nodes, ['1', '2', '3'])
 })

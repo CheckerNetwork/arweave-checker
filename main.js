@@ -23,19 +23,23 @@ let nodes = await getNodes()
 })()
 
 while (true) {
-  const txs = await getTransactions()
-  console.log(`Found ${txs.length} transactions`)
-  const measurement = await measure(
-    pickRandomItem(nodes),
-    pickRandomItem(txs)
-  )
-  console.log('measurement:', measurement)
   try {
-    await submit(measurement)
+    const txs = await getTransactions()
+    console.log(`Found ${txs.length} transactions`)
+    if (txs.length > 0) {
+      const measurement = await measure(
+        pickRandomItem(nodes),
+        pickRandomItem(txs)
+      )
+      console.log('measurement:', measurement)
+      await submit(measurement)
+    } else {
+      console.log('No transactions found')
+    }
   } catch (err) {
-    console.error('Error submitting measurement')
-    console.error(err)
+    console.error(`Error: ${err}`)
   }
+
   Zinnia.jobCompleted()
   console.log(`Waiting ${MEASUREMENT_DELAY / 1_000} seconds...`)
   await new Promise(resolve => setTimeout(resolve, MEASUREMENT_DELAY))

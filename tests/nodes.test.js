@@ -1,15 +1,14 @@
 import { test } from 'zinnia:test'
-import { assertEquals } from 'zinnia:assert'
+import { assertEquals, assertRejects } from 'zinnia:assert'
 import { getNodes } from '../lib/nodes.js'
 
 test('should return arweave.net node by default', async () => {
-  const mockFetch = (pages) => {
+  const mockFetch = (url) => {
+    assertEquals(url, 'https://arweave.net/peers')
     return Promise.resolve({
       ok: true,
-      json: () => ({
-        pages: 1,
-        docs: []
-      })
+      status: 200,
+      json: () => ([])
     })
   }
 
@@ -20,31 +19,18 @@ test('should return arweave.net node by default', async () => {
 })
 
 test('should return nodes from all pages with a custom fetch function', async () => {
-  const mockFetch = (page) => {
-    if (page === 0) {
-      return Promise.resolve({
-        ok: true,
-        json: () => ({
-          pages: 2,
-          docs: [
-            { id: '127.0.0.1:1984' },
-            { id: '127.0.0.1:1986' },
-            {}
-          ]
-        })
-      })
-    }
-
+  const mockFetch = (url) => {
+    assertEquals(url, 'https://arweave.net/peers')
     return Promise.resolve({
       ok: true,
-      json: () => ({
-        pages: 2,
-        docs: [
-          { id: '127.0.0.1' },
-          { id: 'test.arweave.net' },
-          { id: '' }
-        ]
-      })
+      status: 200,
+      json: () => ([
+        '127.0.0.1:1984',
+        '127.0.0.1:1986',
+        '127.0.0.1',
+        'test.arweave.net',
+        ''
+      ])
     })
   }
 
@@ -60,40 +46,16 @@ test('should return nodes from all pages with a custom fetch function', async ()
 })
 
 test('should return nodes where response status is OK', async () => {
-  const mockFetch = (page) => {
-    if (page === 0) {
-      return Promise.resolve({
-        ok: false,
-        text: async () => ('Internal Server Error'),
-        json: () => ({
-          pages: 2,
-          docs: [
-            { id: '127.0.0.1:1984' },
-            { id: '127.0.0.1:1986' },
-            {}
-          ]
-        })
-      })
-    }
-
+  const mockFetch = (url) => {
+    assertEquals(url, 'https://arweave.net/peers')
     return Promise.resolve({
-      ok: true,
-      json: () => ({
-        pages: 2,
-        docs: [
-          { id: '127.0.0.1' },
-          { id: 'test.arweave.net' },
-          { id: '' }
-        ]
-      })
+      ok: false,
+      status: 500,
+      text: async () => ('Internal Server Error'),
+      json: () => ([])
     })
   }
 
-  const nodes = await getNodes(mockFetch)
-  assertEquals(nodes.length, 3)
-  assertEquals(nodes, [
-    { host: 'arweave.net', port: 443, protocol: 'https' },
-    { host: '127.0.0.1', port: 80, protocol: 'http' },
-    { host: 'test.arweave.net', port: 443, protocol: 'https' }
-  ])
+  const err = await assertRejects(async () => await getNodes(mockFetch))
+  assertEquals(err.message, 'Failed to fetch nodes (500): Internal Server Error')
 })
