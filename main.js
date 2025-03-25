@@ -25,8 +25,8 @@ let nodes = await getNodes()
 while (true) {
   try {
     const txs = await getTransactions()
+    console.log(`Found ${txs.length} transactions`)
     if (txs.length > 0) {
-      console.log(`Found ${txs.length} transactions`)
       const measurement = await measure(
         pickRandomItem(nodes),
         pickRandomItem(txs)
